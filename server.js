@@ -1,8 +1,18 @@
 const express = require("express");
-const app = express();
-const port = 8000;
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
+const booksRoutes = require("./routes/books");
 
-// Permettre de résoudre les problèmes de CORS => Définir les headers de la réponse
+require("dotenv").config();
+const app = express();
+const PORT = process.env.PORT;
+
+mongoose
+  .connect(process.env.MONGO_URL, { dbName: "DB-Mon_Vieux_Grimoire" })
+  .then(() => console.log("Connexion à MongoDB réussie !"))
+  .catch(() => console.log("Connexion à MongoDB échouée !"));
+
+// Permettre de résoudre les problèmes de CORS => Définir les origines auxquelles on répond
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -11,34 +21,32 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    "GET, POST, PUT, DELETE, OPTIONS"
   );
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.get("/books", (req, res) => {
-  res.send("Mes livres !");
-});
-
-app.post("/", (req, res) => {
-  res.send("Got a POST request");
-});
-
-app.put("/user", (req, res) => {
-  res.send("Got a PUT request at /user");
-});
-
-app.delete("/user", (req, res) => {
-  res.send("Got a DELETE request at /user");
-});
+app.use("/api/auth", authRoutes);
+app.use("/api/books", booksRoutes);
 
 // Pour utiliser toutes les données d'un dossier
-app.use(express.static("../frontend/public"));
+app.use(express.static("../frontend/public/data"));
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
+
+// MULTER
+// Pour upload des fichiers vers le front
+
+// BCRYPT
+// Pour hasher le mdp
+
+// MONGODB - MONGOOSE
+// Base de donnée - Permet de faire des modèles d'objets
+
+// JWT
+// Le serveur transmet un TOKEN avec une signature,
+// grâce à la signature, le serveur permet de reconnaître 
+// si le TOKEN transmit par l'utilisateur est un TOKEN 
+// fourni par le serveur
