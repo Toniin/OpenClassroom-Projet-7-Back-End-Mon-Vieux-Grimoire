@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const data = require('../../frontend/public/data/data.json')
+const BookCtrl = require("../controllers/book");
 
-router.get("/", (req, res) => {
-  res.send(data);
-});
+// const data = require("../../frontend/public/data/data.json");
+// const Book = require("../models/Book");
+// data.map((data) => {
+//   const book = new Book(data);
+//   console.log(book);
+//   book.save().then(() => console.log(book));
+// });
+
+router.get("/", BookCtrl.getAllBook);
 
 router.post("/", (req, res) => {
   res.send({
@@ -19,11 +25,7 @@ router.get("/bestrating", (req, res) => {
   });
 });
 
-router.get("/:id", (req, res) => {
-  res.send({
-    message: "GET Livre selon l'id",
-  });
-});
+router.get("/:id", BookCtrl.getOneBook);
 
 router.put("/:id", (req, res) => {
   res.send({
