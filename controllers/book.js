@@ -1,13 +1,27 @@
 const Book = require("../models/Book");
 
-exports.getAllBook = (req, res, next) => {
+exports.getAllBooks = (request, response) => {
   Book.find()
-    .then((books) => res.status(200).json(books))
-    .catch((error) => res.status(400).json({ error }));
+    .then((books) => response.status(200).json(books))
+    .catch((error) => response.status(400).json({ error }));
 };
 
-exports.getOneBook = (req, res, next) => {
+exports.getOneBook = (request, response) => {
   Book.findOne({ _id: req.params.id })
-    .then((book) => res.status(200).json(book))
-    .catch((error) => res.status(400).json({ error }));
+    .then((book) => response.status(200).json(book))
+    .catch((error) => response.status(400).json({ error }));
+};
+
+exports.createBook = (request, response) => {
+  const bookObject = request.body;
+  const book = new Book(bookObject);
+  book
+    .save()
+    .then(() =>
+      response
+        .status(201)
+        .json({ book: book })
+        .send(console.log("Book created successfully !"))
+    )
+    .catch((error) => response.status(400).json({ error }));
 };

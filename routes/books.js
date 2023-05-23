@@ -10,14 +10,9 @@ const BookCtrl = require("../controllers/book");
 //   book.save().then(() => console.log(book));
 // });
 
-router.get("/", BookCtrl.getAllBook);
+router.get("/", BookCtrl.getAllBooks);
 
-router.post("/", (req, res) => {
-  res.send({
-    message: "POST Créer un nouveau livre",
-    auth: "REQUIS",
-  });
-});
+router.post("/", BookCtrl.createBook);
 
 router.get("/bestrating", (req, res) => {
   res.send({

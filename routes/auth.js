@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const UserCtrl = require("../controllers/user");
 
-router.post("/signup", (req, res) => {
-  res.send({
-    message: "POST S'inscrire",
-  });
-});
+router.post("/signup", UserCtrl.createUser);
 
-router.post("/login", (req, res) => {
-  res.send({
+router.post("/login", (request, response) => {
+  response.send({
     message: "POST Se connecter",
   });
 });

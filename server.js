@@ -4,8 +4,9 @@ const authRoutes = require("./routes/auth");
 const booksRoutes = require("./routes/books");
 
 require("dotenv").config();
-const app = express();
 const PORT = process.env.PORT;
+const app = express();
+app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URL, { dbName: "DB-Mon_Vieux_Grimoire" })
@@ -47,6 +48,6 @@ app.listen(PORT, () => {
 
 // JWT
 // Le serveur transmet un TOKEN avec une signature,
-// grâce à la signature, le serveur permet de reconnaître 
-// si le TOKEN transmit par l'utilisateur est un TOKEN 
+// grâce à la signature, le serveur permet de reconnaître
+// si le TOKEN transmit par l'utilisateur est un TOKEN
 // fourni par le serveur
