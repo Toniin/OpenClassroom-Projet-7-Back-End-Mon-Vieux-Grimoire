@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const authVerif = require('../middleware/auth-verif')
+const multerConfig = require('../middleware/multer-config')
 const BookCtrl = require("../controllers/book");
 
 // const data = require("../../frontend/public/data/data.json");
@@ -12,32 +14,27 @@ const BookCtrl = require("../controllers/book");
 
 router.get("/", BookCtrl.getAllBooks);
 
-router.post("/", BookCtrl.createBook);
+router.post("/", authVerif, multerConfig, BookCtrl.createBook);
 
-router.get("/bestrating", (req, res) => {
-  res.send({
+router.get("/bestrating", (request, response) => {
+  response.send({
     message: "GET Liste des 3 livres avec la meilleure moyenne",
   });
 });
 
 router.get("/:id", BookCtrl.getOneBook);
 
-router.put("/:id", (req, res) => {
-  res.send({
+router.put("/:id", authVerif, (request, response) => {
+  response.send({
     message: "GET Met à jour le livre avec l'id fourni",
     auth: "REQUIS",
   });
 });
 
-router.delete("/:id", (req, res) => {
-  res.send({
-    message: "GET Supprime le livre avec l'id fourni",
-    auth: "REQUIS",
-  });
-});
+router.delete("/:id", authVerif, BookCtrl.deleteBook);
 
-router.post("/:id/rating", (req, res) => {
-  res.send({
+router.post("/:id/rating", authVerif, (request, response) => {
+  response.send({
     message: "GET Ajoute une note au livre avec l'id fourni",
     auth: "REQUIS",
   });
