@@ -4,14 +4,6 @@ const authVerif = require('../middleware/auth-verif')
 const multerConfig = require('../middleware/multer-config')
 const BookCtrl = require("../controllers/book");
 
-// const data = require("../../frontend/public/data/data.json");
-// const Book = require("../models/Book");
-// data.map((data) => {
-//   const book = new Book(data);
-//   console.log(book);
-//   book.save().then(() => console.log(book));
-// });
-
 router.get("/", BookCtrl.getAllBooks);
 
 router.post("/", authVerif, multerConfig, BookCtrl.createBook);

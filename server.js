@@ -35,18 +35,3 @@ app.use("/api/books", booksRoutes);
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
-// MULTER
-// Pour upload des fichiers vers le front
-
-// BCRYPT
-// Pour hasher le mdp
-
-// MONGODB - MONGOOSE
-// Base de donnée - Permet de faire des modèles d'objets
-
-// JWT
-// Le serveur transmet un TOKEN avec une signature,
-// grâce à la signature, le serveur permet de reconnaître
-// si le TOKEN transmit par l'utilisateur est un TOKEN
-// fourni par le serveur

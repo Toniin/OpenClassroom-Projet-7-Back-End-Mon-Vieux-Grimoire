@@ -21,6 +21,12 @@ exports.createBook = (request, response) => {
     imageUrl: `${request.protocol}://${request.get("host")}/images/${
       request.file.filename
     }`,
+    ratings:
+      bookObject.ratings[0].grade === 0
+        ? []
+        : { userId: request.auth.userId, grade: bookObject.ratings[0].grade },
+    averageRating:
+      bookObject.ratings[0].grade === 0 ? 0 : bookObject.ratings[0].grade,
   });
   book
     .save()
@@ -37,9 +43,9 @@ exports.updateBook = (request, response) => {
   Book.findOne({ _id: request.params.id })
     .then((book) => {
       if (book.userId != request.auth.userId) {
-        response.status(401).json({ message: "Non autorisé" });
+        response.status(403).json({ message: "Unauthorized request" });
       } else {
-        let bookObject
+        let bookObject;
 
         if (request.file) {
           const filename = book.imageUrl.split("/images/")[1];
@@ -50,7 +56,7 @@ exports.updateBook = (request, response) => {
             imageUrl: `${request.protocol}://${request.get("host")}/images/${
               request.file.filename
             }`,
-          }
+          };
         } else {
           bookObject = {
             ...request.body,
@@ -76,7 +82,7 @@ exports.deleteBook = (request, response) => {
   Book.findOne({ _id: request.params.id })
     .then((book) => {
       if (book.userId != request.auth.userId) {
-        response.status(401).json({ message: "Non autorisé" });
+        response.status(403).json({ message: "Unauthorized request" });
       } else {
         const filename = book.imageUrl.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
