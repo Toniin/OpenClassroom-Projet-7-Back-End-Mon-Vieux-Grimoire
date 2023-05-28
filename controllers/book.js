@@ -33,6 +33,45 @@ exports.createBook = (request, response) => {
     .catch((error) => response.status(400).json({ error: error.message }));
 };
 
+exports.updateBook = (request, response) => {
+  Book.findOne({ _id: request.params.id })
+    .then((book) => {
+      if (book.userId != request.auth.userId) {
+        response.status(401).json({ message: "Non autorisé" });
+      } else {
+        let bookObject
+
+        if (request.file) {
+          const filename = book.imageUrl.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => "");
+
+          bookObject = {
+            ...JSON.parse(request.body.book),
+            imageUrl: `${request.protocol}://${request.get("host")}/images/${
+              request.file.filename
+            }`,
+          }
+        } else {
+          bookObject = {
+            ...request.body,
+          };
+        }
+
+        Book.updateOne(
+          { _id: request.params.id },
+          { ...bookObject, _id: request.params.id, userId: request.auth.userId }
+        )
+          .then(() =>
+            response
+              .status(200)
+              .json({ message: "Book modified successfully !" })
+          )
+          .catch((error) => response.status(400).json({ error }));
+      }
+    })
+    .catch((error) => response.status(400).json({ error: error.message }));
+};
+
 exports.deleteBook = (request, response) => {
   Book.findOne({ _id: request.params.id })
     .then((book) => {

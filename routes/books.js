@@ -24,12 +24,7 @@ router.get("/bestrating", (request, response) => {
 
 router.get("/:id", BookCtrl.getOneBook);
 
-router.put("/:id", authVerif, (request, response) => {
-  response.send({
-    message: "GET Met à jour le livre avec l'id fourni",
-    auth: "REQUIS",
-  });
-});
+router.put("/:id", authVerif, multerConfig, BookCtrl.updateBook);
 
 router.delete("/:id", authVerif, BookCtrl.deleteBook);
 
