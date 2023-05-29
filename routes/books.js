@@ -20,11 +20,6 @@ router.put("/:id", authVerif, multerConfig, BookCtrl.updateBook);
 
 router.delete("/:id", authVerif, BookCtrl.deleteBook);
 
-router.post("/:id/rating", authVerif, (request, response) => {
-  response.send({
-    message: "GET Ajoute une note au livre avec l'id fourni",
-    auth: "REQUIS",
-  });
-});
+router.post("/:id/rating", authVerif, BookCtrl.ratingBook);
 
 module.exports = router;

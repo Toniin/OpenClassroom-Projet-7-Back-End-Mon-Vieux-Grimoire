@@ -42,6 +42,7 @@ exports.createBook = (request, response) => {
 exports.updateBook = (request, response) => {
   Book.findOne({ _id: request.params.id })
     .then((book) => {
+      console.log(request.auth);
       if (book.userId != request.auth.userId) {
         response.status(403).json({ message: "Unauthorized request" });
       } else {
@@ -98,6 +99,34 @@ exports.deleteBook = (request, response) => {
               response.status(400).json({ error: error.message })
             );
         });
+      }
+    })
+    .catch((error) => response.status(400).json({ error: error.message }));
+};
+
+exports.ratingBook = (request, response) => {
+  Book.findOne({ _id: request.params.id })
+    .then((book) => {
+      const ratings = [...book.ratings];
+
+      // Check if user rated already the book
+      const isRated = ratings.some(
+        (rating) => rating.userId === request.auth.userId
+      );
+
+      if (isRated) {
+        response.status(403).json({ message: "Unauthorized request" });
+      } else {
+        ratings.push({
+          userId: request.auth.userId,
+          grade: request.body.rating,
+        });
+
+        Book.updateOne({ _id: request.params.id }, { ratings: ratings })
+          .then(() =>
+            response.status(200).json({ message: "Book rating successfully !" })
+          )
+          .catch((error) => response.status(400).json({ error }));
       }
     })
     .catch((error) => response.status(400).json({ error: error.message }));
