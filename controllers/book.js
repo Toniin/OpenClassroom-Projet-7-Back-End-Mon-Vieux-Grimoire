@@ -1,5 +1,6 @@
 const Book = require("../models/Book");
 const fs = require("fs");
+const averageRating = require("../utils/averageRating");
 
 exports.getAllBooks = (request, response) => {
   Book.find()
@@ -122,7 +123,10 @@ exports.ratingBook = (request, response) => {
           grade: request.body.rating,
         });
 
-        Book.updateOne({ _id: request.params.id }, { ratings: ratings })
+        Book.updateOne(
+          { _id: request.params.id },
+          { ratings: ratings, averageRating: averageRating(ratings) }
+        )
           .then(() =>
             response.status(200).json({ message: "Book rating successfully !" })
           )
