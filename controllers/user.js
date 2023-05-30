@@ -42,10 +42,7 @@ exports.login = (request, response) => {
                 userId: user._id,
                 token: jwt.sign(
                   { userId: user._id },
-                  process.env.JWT_PRIVATE_KEY,
-                  {
-                    expiresIn: "1h",
-                  }
+                  process.env.JWT_PRIVATE_KEY
                 ),
               });
             } else {

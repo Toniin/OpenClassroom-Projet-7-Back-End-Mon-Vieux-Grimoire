@@ -8,11 +8,7 @@ router.get("/", BookCtrl.getAllBooks);
 
 router.post("/", authVerif, multerConfig, BookCtrl.createBook);
 
-router.get("/bestrating", (request, response) => {
-  response.send({
-    message: "GET Liste des 3 livres avec la meilleure moyenne",
-  });
-});
+router.get("/bestrating", BookCtrl.bestRatingBooks);
 
 router.get("/:id", BookCtrl.getOneBook);
 

@@ -135,3 +135,18 @@ exports.ratingBook = (request, response) => {
     })
     .catch((error) => response.status(400).json({ error: error.message }));
 };
+
+exports.bestRatingBooks = (request, response) => {
+  Book.find()
+    .then((books) => {
+      // bestRating return array of 3 books with the best average rating
+      const bestRating = books
+        .sort(
+          (currentBook, nextBook) =>
+            nextBook.averageRating - currentBook.averageRating
+        )
+        .splice(0, 3);
+      response.status(200).json(bestRating);
+    })
+    .catch((error) => response.status(400).json({ error: error.message }));
+};
