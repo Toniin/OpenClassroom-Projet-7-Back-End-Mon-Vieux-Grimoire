@@ -10,12 +10,6 @@ const app = express();
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, 'images')));
 
-mongoose
-  .connect(process.env.MONGO_URL, { dbName: "DB-Mon_Vieux_Grimoire" })
-  .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
-
-// Permettre de résoudre les problèmes de CORS => Définir les origines auxquelles on répond
 app.use((request, response, next) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader(
@@ -28,6 +22,12 @@ app.use((request, response, next) => {
   );
   next();
 });
+
+// Connect to mongodb database
+mongoose
+  .connect(process.env.MONGO_URL, { dbName: "DB-Mon_Vieux_Grimoire" })
+  .then(() => console.log("Connexion à MongoDB réussie !"))
+  .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/books", booksRoutes);
