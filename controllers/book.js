@@ -20,7 +20,7 @@ exports.createBook = (request, response) => {
     ...bookObject,
     userId: request.auth.userId,
     imageUrl: `${request.protocol}://${request.get("host")}/images/${
-      request.file.filename
+      request.file.editedName
     }`,
     ratings:
       bookObject.ratings[0].grade === 0
@@ -56,7 +56,7 @@ exports.updateBook = (request, response) => {
           bookObject = {
             ...JSON.parse(request.body.book),
             imageUrl: `${request.protocol}://${request.get("host")}/images/${
-              request.file.filename
+              request.file.editedName
             }`,
           };
         } else {
