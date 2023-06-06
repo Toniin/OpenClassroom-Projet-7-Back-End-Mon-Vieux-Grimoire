@@ -43,7 +43,6 @@ exports.createBook = (request, response) => {
 exports.updateBook = (request, response) => {
   Book.findOne({ _id: request.params.id })
     .then((book) => {
-      console.log(request.auth);
       if (book.userId != request.auth.userId) {
         response.status(403).json({ message: "Unauthorized request" });
       } else {
@@ -143,7 +142,7 @@ exports.bestRatingBooks = (request, response) => {
       const bestRating = books
         .sort(
           (currentBook, nextBook) =>
-            nextBook.averageRating - currentBook.averageRating 
+            nextBook.averageRating - currentBook.averageRating
         )
         .splice(0, 3);
       response.status(200).json(bestRating);
